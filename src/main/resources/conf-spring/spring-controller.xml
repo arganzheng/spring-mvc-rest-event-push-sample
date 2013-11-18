@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+
+	<!-- Enables @Controller 另外：配置了mvc:resources就必须配置这个选项，否则handler mapping都失效了 
+		@see http://stackoverflow.com/questions/7910845/the-handler-mapping-from-the-mvcresource-override-other-mappings-which-defined -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean
+				class="com.qq.ecc.openapi.eventpush.common.DefaultJacksonHttpMessageConverter">
+				<!-- True only for the blog article - a production system would set this 
+					to false to reduce the number of bytes sent across the wire: -->
+				<property name="prettyPrint" value="true" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- Enables @Autowired -->
+	<context:annotation-config />
+
+	<context:component-scan base-package="com.qq.ecc.openapi.eventpush.controller" />
+
+	<!-- Unfortunately we have to repeat an instance of this class here because 
+		the mvc:message-converters element above does not support <ref/> elements: -->
+	<bean id="jacksonHttpMessageConverter"
+		class="com.qq.ecc.openapi.eventpush.common.DefaultJacksonHttpMessageConverter">
+		<property name="prettyPrint" value="true" />
+	</bean>
+
+	<!-- Allow Exceptions to be handled in annotated methods if desired. Otherwise 
+		fallback to the 'restExceptionResolver' below: -->
+	<bean id="annotationMethodHandlerExceptionResolver"
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver">
+		<property name="order" value="0" />
+	</bean>
+
+	<bean id="restExceptionResolver"
+		class="com.qq.ecc.openapi.eventpush.common.RestHandlerExceptionResolver">
+		<property name="order" value="100" />
+	</bean>
+
+</beans>
