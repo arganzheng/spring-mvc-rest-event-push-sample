@@ -21,9 +21,6 @@ import com.qq.ecc.openapi.eventpush.exception.UnknownResourceException;
 import com.qq.ecc.openapi.eventpush.model.User;
 import com.qq.ecc.openapi.eventpush.util.SignUtils;
 
-/**
- * Example Spring MVC Controller that will throw exceptions for specific URLs to show exception handling.
- */
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -40,28 +37,18 @@ public class UserController {
     @ResponseBody
     public User getUser(@PathVariable
     String username) {
-        // simulate Manager/DAO call:
         return findUser(username);
     }
 
-    /**
-     * Simulates a Manager or DAO lookup for a stored user account.
-     * 
-     * @param username the username for the user to lookup. Supports only 'jsmith' and 'djones' for testing.
-     * @return the associated user
-     * @throws UnknownResourceException if there is no user with the specified username.
-     */
     private User findUser(String username) throws UnknownResourceException {
         if (!StringUtils.hasText(username)) {
             throw new IllegalArgumentException("Username is required.");
         }
 
-        // simulate a successful lookup for 2 users:
         if (users.containsKey(username)) {
             return users.get(username);
         }
 
-        // any other lookup throws an exception (not found):
         throw new UnknownResourceException("Unable to find user with username '" + username + "'");
     }
 
@@ -72,18 +59,12 @@ public class UserController {
         users.put(user.getUsername(), user);
         RestResponse<User> resp = new RestResponse<User>();
         resp.setData(user);
-        try {
-            Thread.currentThread().sleep(5000);
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
         return resp;
     }
 
     @RequestMapping(value = "{username}", method = RequestMethod.POST)
     @ResponseBody
-    public User updateUser(@RequestBody
+    public RestResponse<User> updateUser(@RequestBody
     User user, @RequestParam("timestamp")
     String timestamp, @RequestParam("noice")
     String noice, @RequestParam("signature")
@@ -99,6 +80,7 @@ public class UserController {
         String sign = SignUtils.makeSign(params);
 
         thisUser.setUsername(sign);
-        return thisUser;
+        return new RestResponse<User>(thisUser);
     }
+
 }

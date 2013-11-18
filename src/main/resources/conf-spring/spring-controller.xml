@@ -47,4 +47,10 @@
 		<property name="order" value="100" />
 	</bean>
 
+	<mvc:interceptors>
+		<bean class="com.qq.ecc.openapi.eventpush.common.AuthorizationInterceptor">
+			<property name="secretKey" value="yourSecretKey" />
+		</bean>
+	</mvc:interceptors>
+
 </beans>

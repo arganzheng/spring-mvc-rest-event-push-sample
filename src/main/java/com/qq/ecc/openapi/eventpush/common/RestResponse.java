@@ -24,6 +24,10 @@ public class RestResponse<T> {
     public RestResponse(){
     }
 
+    public RestResponse(T data){
+        this.data = data;
+    }
+
     public int getErrorCode() {
         return errorCode;
     }
