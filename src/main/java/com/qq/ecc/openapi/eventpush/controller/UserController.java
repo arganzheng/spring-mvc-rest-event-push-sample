@@ -35,9 +35,10 @@ public class UserController {
 
     @RequestMapping(value = "/{username}", method = GET)
     @ResponseBody
-    public User getUser(@PathVariable
+    public RestResponse<User> getUser(@PathVariable
     String username) {
-        return findUser(username);
+        User user = findUser(username);
+        return new RestResponse<User>(user);
     }
 
     private User findUser(String username) throws UnknownResourceException {

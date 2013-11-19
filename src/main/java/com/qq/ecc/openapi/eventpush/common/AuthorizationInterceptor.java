@@ -36,8 +36,8 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
 
         String signature = request.getParameter("signature");
         Assert.isTrue(signature != null, "signature is required!");
-        String nonce = request.getParameter("noice");
-        Assert.isTrue(nonce != null, "noice is required!");
+        String nonce = request.getParameter("nonce");
+        Assert.isTrue(nonce != null, "nonce is required!");
         String timestamp = request.getParameter("timestamp");
         Assert.isTrue(timestamp != null, "timestamp is required!");
 
