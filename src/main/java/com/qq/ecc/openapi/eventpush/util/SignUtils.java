@@ -35,7 +35,9 @@ public class SignUtils {
     }
 
     public static String makeSign(String source, String charset) {
-        charset = "utf-8";
+        if (charset == null) {
+                charset = "UTF-8";
+        }
         byte[] hash = encryptSHA1(source, charset);
         return byte2hex(hash);
     }
