@@ -1,5 +1,7 @@
 package com.qq.ecc.openapi.eventpush.common;
 
+import com.qq.ecc.openapi.eventpush.constant.Constants;
+
 /**
  * REST 返回格式，这样可以利用@ResponseBody注解。
  * 
@@ -12,8 +14,8 @@ public class RestResponse<T> {
 
     public static final RestResponse ERROR_UNKNOWN = new RestResponse(RestErrorCode.UNKONW_ERROR, "系统异常！");
 
-    private int                      errorCode;
-    private String                   errorMessage;
+    private int                      errorCode     = 0;
+    private String                   errorMessage  = Constants.EMPTY_STRING;
     private T                        data;
 
     public RestResponse(int errorCode, String errorMessage){

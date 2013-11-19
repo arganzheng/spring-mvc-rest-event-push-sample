@@ -26,6 +26,8 @@ public abstract class Constants {
     /** POST请求方式 */
     public static final String METHOD_POST        = "post";
 
+    public static final String EMPTY_STRING       = "";
+
     public static final Long   ERROR_CODE_SUCCESS = 0L;
 
     public static int          ERROR_UNKNOWN      = 10001;
