@@ -63,19 +63,19 @@ public class RestHandlerExceptionResolver extends AbstractHandlerExceptionResolv
         // jacksonHttpMessageConverter.write(RestResponse.ERROR_UNKNOWN, jsonMediaType,
         // new ServletServerHttpResponse(response));
         // }
-
+        
         if (ex instanceof RestException) {
             RestException rex = (RestException) ex;
             jacksonHttpMessageConverter.write(new RestError(rex.getErrorCode(), ex.getMessage()), jsonMediaType,
                                               new ServletServerHttpResponse(response));
         } else if (ex instanceof IllegalArgumentException || ex instanceof MissingServletRequestParameterException) {
-            jacksonHttpMessageConverter.write(new RestError(RestErrorCode.BIZ_ARGUMENT_INVALID, "请求参数不合法："
-                                                                                                + ex.getMessage()),
+            jacksonHttpMessageConverter.write(new RestError(RestErrorCode.BIZ_ARGUMENT_INVALID,
+                                                            "Invalid Request Parameter: " + ex.getMessage()),
                                               jsonMediaType, new ServletServerHttpResponse(response));
         } else {
             log.error(ex.getMessage(), ex);
-            jacksonHttpMessageConverter.write(new RestError(RestErrorCode.UNKONW_ERROR, "系统错误"), jsonMediaType,
-                                              new ServletServerHttpResponse(response));
+            jacksonHttpMessageConverter.write(new RestError(RestErrorCode.UNKONW_ERROR, "System Error!"),
+                                              jsonMediaType, new ServletServerHttpResponse(response));
         }
     }
 }

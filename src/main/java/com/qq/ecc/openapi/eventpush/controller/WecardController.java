@@ -2,20 +2,26 @@ package com.qq.ecc.openapi.eventpush.controller;
 
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.qq.ecc.openapi.eventpush.common.RestResponse;
+import com.qq.ecc.openapi.eventpush.model.BindCardReq;
+import com.qq.ecc.openapi.eventpush.model.BindCardResp;
 import com.qq.ecc.openapi.eventpush.model.User;
 
 /**
@@ -78,12 +84,57 @@ public class WecardController {
      */
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public RestResponse<User> receiveMessage(@RequestBody
-    User user) {
-        users.put(user.getUsername(), user);
-        RestResponse<User> resp = new RestResponse<User>();
-        resp.setData(user);
+    public RestResponse<Object> receiveMessage(HttpServletRequest request) throws IOException {
+        // BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream(),
+        // Constants.CHARSET_UTF8));
+        String json = getStringValueFromReader(request.getReader());
+
+        JSONObject jsonObject = new JSONObject(json);
+
+        RestResponse<Object> resp = new RestResponse<Object>();
+
+        String event = jsonObject.getString("event");
+        if ("bindCard".equalsIgnoreCase(event)) {
+            BindCardReq bindCardReq = new BindCardReq();
+            JSONObject data = jsonObject.getJSONObject("data");
+            bindCardReq.setOpenId(data.getString("openId"));
+            bindCardReq.setCardNo(data.getString("cardNo"));
+            bindCardReq.setMobile(data.getString("mobile"));
+
+            BindCardResp bindCardResp = doBindCard(bindCardReq);
+            resp.setData(bindCardResp);
+        } else {
+            // TODO
+        }
+
         return resp;
     }
 
+    private BindCardResp doBindCard(BindCardReq bindCardReq) {
+        BindCardResp bindCardResp = new BindCardResp();
+
+        bindCardResp.setOpenId(bindCardReq.getOpenId());
+        bindCardResp.setCardId(bindCardReq.getCardNo());
+        bindCardResp.setCardNo(bindCardReq.getCardNo());
+        bindCardResp.setExpiryDate("2013-10-31 20:18:20");
+        bindCardResp.setCardLevelId(1);
+        bindCardResp.setName("arganzheng");
+        bindCardResp.setMobile(bindCardReq.getMobile());
+        bindCardResp.setBirthday("1985-11-16");
+        bindCardResp.setPoints(100);
+
+        return bindCardResp;
+    }
+
+    private String getStringValueFromReader(BufferedReader reader) {
+        StringBuilder sb = new StringBuilder();
+        String line = null;
+        try {
+            while ((line = reader.readLine()) != null)
+                sb.append(line);
+        } catch (Exception e) { /* report an error */
+            logger.error("get data from request failed!", e);
+        }
+        return sb.toString();
+    }
 }
