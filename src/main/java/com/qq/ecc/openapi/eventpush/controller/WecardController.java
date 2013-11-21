@@ -4,8 +4,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.qq.ecc.openapi.eventpush.common.RestResponse;
 import com.qq.ecc.openapi.eventpush.model.BindCardReq;
 import com.qq.ecc.openapi.eventpush.model.BindCardResp;
-import com.qq.ecc.openapi.eventpush.model.User;
 
 /**
  * 会员卡消息通知处理
@@ -34,18 +31,10 @@ import com.qq.ecc.openapi.eventpush.model.User;
 @RequestMapping("/wecard")
 public class WecardController {
 
-    private static final Logger      logger = Logger.getLogger(WecardController.class);
+    private static final Logger logger = Logger.getLogger(WecardController.class);
 
     @Value("${secretKey}")
-    private String                   secretKey;
-
-    private static Map<String, User> users  = new HashMap<String, User>();
-
-    static {
-        users.put("jsmith", new User("Jane Smith", "jsmith"));
-        users.put("djones", new User("Don Jones", "djones"));
-        users.put("argan", new User("Argan Zheng", "argan"));
-    }
+    private String              secretKey;
 
     /**
      * <pre>
