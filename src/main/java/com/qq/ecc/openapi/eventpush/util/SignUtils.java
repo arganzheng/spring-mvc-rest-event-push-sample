@@ -1,6 +1,7 @@
 package com.qq.ecc.openapi.eventpush.util;
 
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class SignUtils {
 
     public static String makeSign(String source, String charset) {
         if (charset == null) {
-                charset = "UTF-8";
+            charset = "UTF-8";
         }
         byte[] hash = encryptSHA1(source, charset);
         return byte2hex(hash);

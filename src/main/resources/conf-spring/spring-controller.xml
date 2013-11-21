@@ -9,6 +9,12 @@
                            http://www.springframework.org/schema/mvc
                            http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:idc.properties</value>
+		</property>
+	</bean>
 
 	<!-- Enables @Controller 另外：配置了mvc:resources就必须配置这个选项，否则handler mapping都失效了 
 		@see http://stackoverflow.com/questions/7910845/the-handler-mapping-from-the-mvcresource-override-other-mappings-which-defined -->
@@ -48,9 +54,7 @@
 	</bean>
 
 	<mvc:interceptors>
-		<bean class="com.qq.ecc.openapi.eventpush.common.AuthorizationInterceptor">
-			<property name="secretKey" value="yourSecretKey" />
-		</bean>
+		<bean class="com.qq.ecc.openapi.eventpush.common.AuthorizationInterceptor" />
 	</mvc:interceptors>
 
 </beans>
