@@ -78,6 +78,8 @@ public class WecardController {
         // Constants.CHARSET_UTF8));
         String json = getStringValueFromReader(request.getReader());
 
+        logger.info("Receive json Message: " + json);
+        
         JSONObject jsonObject = new JSONObject(json);
 
         RestResponse<Object> resp = new RestResponse<Object>();
