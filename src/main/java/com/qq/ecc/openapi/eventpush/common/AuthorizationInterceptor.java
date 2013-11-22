@@ -48,8 +48,9 @@ public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
             String sign = SignUtils.makeSign(paramsToSign);
 
             if (sign == null || !sign.equals(signature)) {
-                logger.error("参数 sign错误，请检查是否sign的计算算法有误，或者鉴权参数设置有误！");
-                throw new AuthorizationException("参数 sign错误，请检查是否sign的计算算法有误，或者鉴权参数设置有误！");
+                logger.error("参数 sign错误，请检查是否sign的计算算法有误，或者鉴权参数设置有误");
+                throw new AuthorizationException(
+                                                 "Signature verify failed! Please check your signature calculation algorithm and authentication parameters!");
             }
             return true;
         }
